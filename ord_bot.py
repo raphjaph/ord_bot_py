@@ -28,4 +28,3 @@ while True:
     
     next = latest + 1
     time.sleep(10)
-
