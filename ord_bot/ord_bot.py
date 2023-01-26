@@ -11,14 +11,15 @@ client = tweepy.Client(
 )
 
 (data, _, _, _) = client.get_home_timeline(max_results=1, user_auth=True)
-next = int(str(data[0]).split()[1]) + 1
+next_inscription_number = int(str(data[0]).split()[1]) + 1
 
 while True:
     entries = feedparser.parse("https://ordinals.com/feed.xml").entries
-     
-    latest = int(entries[0]["title"].split()[1])
+    entries.reverse() 
+    latest_inscription_number = int(entries[-1]["title"].split()[1])
+
     
-    for i in range(latest - next, next, -1):
+    for i in range(len(entries) - 1 - (latest_inscription_number - next_inscription_number), len(entries)):
         entry = entries[i]
         content = entry.title + "\n" + entry.link + "\n"
         print(content)
@@ -26,5 +27,5 @@ while True:
         print(response)
         time.sleep(10)
     
-    next = latest + 1
+    next_inscription_number = latest_inscription_number + 1
     time.sleep(10)
