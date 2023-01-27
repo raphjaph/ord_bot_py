@@ -1,0 +1,13 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+feedparser = "==6.0.10"
+tweepy = "==4.12.1"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
