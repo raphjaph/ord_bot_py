@@ -1,6 +1,9 @@
 default:
   just --list
 
+
+all: forbid fmt-check
+
 deploy:
   ssh 8el "mkdir -p ~/infrastructure/ord_bot"
   scp -r Dockerfile ord_bot/*.py 8el:~/infrastructure/ord_bot
@@ -8,8 +11,6 @@ deploy:
     && docker build -t ord_bot . \
     && docker stop ord_bot \
     && docker start ord_bot"
-
-all: forbid fmt-check
 
 forbid:
   ./bin/forbid
@@ -28,3 +29,6 @@ install-editable:
 
 lock:
   pipenv lock --pre
+
+start:
+  pipenv shell
