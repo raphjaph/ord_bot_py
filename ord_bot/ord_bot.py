@@ -4,30 +4,57 @@ import feedparser
 import tweepy
 from credentials import *
 
-client = tweepy.Client(
-  consumer_key=consumer_key,
-  consumer_secret=consumer_secret,
-  access_token=access_token,
-  access_token_secret=access_token_secret
-)
+class OrdBot:
+  def __init__(self, client, feed):
+    self.client = client
+    self.feed = feed
 
-(data, _, _, _) = client.get_home_timeline(max_results=1, user_auth=True)
-next_inscription_number = int(str(data[0]).split()[1]) + 1
+  def get_last_tweeted_inscription(self):
+    (data, _, _, _) = self.client.get_home_timeline(
+      max_results=1, user_auth=True
+    )
+    current = int(str(data[0]).split()[1])
 
-while True:
-  entries = feedparser.parse("https://ordinals.com/feed.xml").entries
-  entries.reverse()
-  latest_inscription_number = int(entries[-1]["title"].split()[1])
+    return current
 
-  for i in range(len(entries) - 1 -
-                 (latest_inscription_number - next_inscription_number),
-                 len(entries)):
-    entry = entries[i]
-    content = entry.title + "\n" + entry.link + "\n"
-    print(content)
-    response = client.create_tweet(text=content)
-    print(response)
-    time.sleep(10)
+  def get_new_inscriptions(self):
+    entries = feedparser.parse(self.feed).entries
+    latest = int(entries[0]["title"].split()[1])
+    
 
-  next_inscription_number = latest_inscription_number + 1
-  time.sleep(10)
+    return entries
+
+
+  def run(self):
+    print("running ord_bot...")
+    while True:
+      entries = self.get_new_inscriptions()
+      current = self.get_last_tweeted_inscription()
+      latest = self.get_latest_inscription()
+      print("latest: {}\nnext: {}".format(latest, current))
+
+      offset = len(entries) - latest + current
+
+      for i in range(offset, len(entries)):
+        content = "{}\n{}\n".format(entries[i].title, entries.link)
+        print(content)
+        # response = self.client.create_tweet(text=content)
+        # print(response)
+        time.sleep(10)
+
+      current = latest + 1
+      time.sleep(10)
+
+def main():
+  client = tweepy.Client(
+    consumer_key=consumer_key,
+    consumer_secret=consumer_secret,
+    access_token=access_token,
+    access_token_secret=access_token_secret
+  )
+
+  bot = OrdBot(client, "https://ordinals.com/feed.xml")
+  bot.run()
+
+if __name__ == "__main__":
+  main()

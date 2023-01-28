@@ -1,7 +1,6 @@
 default:
   just --list
 
-
 all: forbid fmt-check
 
 deploy:
@@ -29,6 +28,9 @@ install-editable:
 
 lock:
   pipenv lock --pre
+
+run:
+  python3 ord_bot/ord_bot.py
 
 start:
   pipenv shell
