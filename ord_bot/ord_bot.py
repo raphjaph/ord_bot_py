@@ -1,23 +1,21 @@
 import time
 from io import BytesIO
 
+from selenium import webdriver
 import feedparser
 import tweepy
 from credentials import *
-from html2image import Html2Image
 from PIL import Image
 
 class OrdBot:
-  def __init__(self, client, feed, hti):
+  def __init__(self, client, webdriver, feed):
     self.client = client
     self.feed = feed
-    self.hti = hti
+    self.webdriver = webdriver
 
   def get_last_tweeted_inscription(self):
-    (data, _, _, _) = self.client.get_home_timeline(
-      max_results=1, user_auth=True
-    )
-    current = int(str(data[0]).split()[1])
+    last_tweet = self.client.home_timeline(count=1)[0]
+    current = int(str(last_tweet.text).split()[1])
 
     return current
 
@@ -28,35 +26,40 @@ class OrdBot:
     new = entries[:offset]
     new.reverse()
 
-    self.hti.size = (500, 800)
-    screenshot = self.hti.screenshot(url=new[0].link)
+    return new
+
+  def get_screenshot(self, inscription):
+    screenshot = self.webdriver.get(inscription.link).save_screenshot("screenshot.png")
     image = Image.open(screenshot[0])
     cropped = image.crop((0, 600, 1000, 1345))
     cropped.save("cropped.png")
 
-    return new
+    return "cropped.png"
 
   def run(self):
     print("running ord_bot...")
     while True:
-      for entry in self.get_new_inscriptions():
-        content = "{}\n{}\n".format(entry.title, entry.link)
-        print(content)
-        response = self.client.create_tweet(text=content)
-        print(response + "\n")
+      for inscription in self.get_new_inscriptions():
+        status = "{}\n{}\n".format(inscription.title, inscription.link)
+        media = self.client.media_upload(
+          filename=self.get_screenshot(inscription)
+        )
+        response = self.client.update_status(status, media_ids=[media.media_id])
+        print(response + "\n\n")
         time.sleep(10)
 
       time.sleep(10)
 
 def main():
-  client = tweepy.Client(
+  auth = tweepy.OAuth1UserHandler(
     consumer_key=consumer_key,
     consumer_secret=consumer_secret,
     access_token=access_token,
     access_token_secret=access_token_secret
   )
-  hti = Html2Image()
-  bot = OrdBot(client, "https://ordinals.com/feed.xml", hti)
+  client = tweepy.API(auth)
+  driver = webdriver.Chrome()
+  bot = OrdBot(client, driver, "https://ordinals.com/feed.xml")
   bot.run()
 
 if __name__ == "__main__":
