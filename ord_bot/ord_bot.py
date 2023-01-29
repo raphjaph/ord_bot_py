@@ -26,7 +26,6 @@ class OrdBot:
 
     return new
 
-
   def run(self):
     print("running ord_bot...")
     while True:
@@ -34,7 +33,7 @@ class OrdBot:
         content = "{}\n{}\n".format(entry.title, entry.link)
         print(content)
         response = self.client.create_tweet(text=content)
-        print(response)
+        print(response + "\n")
         time.sleep(10)
 
       time.sleep(10)
