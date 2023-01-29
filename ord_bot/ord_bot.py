@@ -21,8 +21,9 @@ class OrdBot:
     entries = feedparser.parse(self.feed).entries
     latest = int(entries[0]["title"].split()[1])
     offset = len(entries) - latest + self.get_last_tweeted_inscription()
+    new = entries[offset:-1].reverse()
 
-    return entries[offset:-1]
+    return new
 
   def run(self):
     print("running ord_bot...")
