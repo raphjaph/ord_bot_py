@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 feedparser = "==6.0.10"
 tweepy = "==4.12.1"
+html2image = "*"
+pillow = "*"
 
 [dev-packages]
 isort = "*"

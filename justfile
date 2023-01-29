@@ -12,6 +12,9 @@ deploy:
     && docker rm ord_bot \
     && docker run --name=ord_bot --restart=unless-stopped -d ord_bot"
 
+env:
+  pipenv shell
+
 forbid:
   ./bin/forbid
 
@@ -32,6 +35,3 @@ lock:
 
 run:
   python3 ord_bot/ord_bot.py
-
-start:
-  pipenv shell
