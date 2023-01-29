@@ -20,29 +20,20 @@ class OrdBot:
   def get_new_inscriptions(self):
     entries = feedparser.parse(self.feed).entries
     latest = int(entries[0]["title"].split()[1])
-    
+    offset = len(entries) - latest + self.get_last_tweeted_inscription()
 
-    return entries
-
+    return entries[offset:-1]
 
   def run(self):
     print("running ord_bot...")
     while True:
-      entries = self.get_new_inscriptions()
-      current = self.get_last_tweeted_inscription()
-      latest = self.get_latest_inscription()
-      print("latest: {}\nnext: {}".format(latest, current))
-
-      offset = len(entries) - latest + current
-
-      for i in range(offset, len(entries)):
-        content = "{}\n{}\n".format(entries[i].title, entries.link)
+      for entry in self.get_new_inscriptions():
+        content = "{}\n{}\n".format(entry.title, entry.link)
         print(content)
-        # response = self.client.create_tweet(text=content)
-        # print(response)
+        response = self.client.create_tweet(text=content)
+        print(response)
         time.sleep(10)
 
-      current = latest + 1
       time.sleep(10)
 
 def main():
