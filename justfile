@@ -9,7 +9,8 @@ deploy:
   ssh 8el "cd ~/infrastructure/ord_bot \
     && docker build -t ord_bot . \
     && docker stop ord_bot \
-    && docker start ord_bot"
+    && docker rm ord_bot \
+    && docker run --name=ord_bot --restart=unless-stopped -d ord_bot"
 
 forbid:
   ./bin/forbid

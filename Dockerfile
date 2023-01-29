@@ -6,4 +6,4 @@ COPY . .
 
 RUN pip install tweepy feedparser
 
-CMD [ "python", "./ord_bot.py" ]
+CMD [ "python", "-u", "./ord_bot.py" ]
