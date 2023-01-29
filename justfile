@@ -35,3 +35,6 @@ lock:
 
 run:
   python3 ord_bot/ord_bot.py
+
+test:
+  python3 -m unittest tests/*.py

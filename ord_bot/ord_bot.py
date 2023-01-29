@@ -1,11 +1,10 @@
 import time
-from io import BytesIO
 
-from selenium import webdriver
 import feedparser
 import tweepy
 from credentials import *
 from PIL import Image
+from selenium import webdriver
 
 class OrdBot:
   def __init__(self, client, webdriver, feed):
@@ -29,7 +28,8 @@ class OrdBot:
     return new
 
   def get_screenshot(self, inscription):
-    screenshot = self.webdriver.get(inscription.link).save_screenshot("screenshot.png")
+    screenshot = self.webdriver.get(inscription.link
+                                    ).save_screenshot("screenshot.png")
     image = Image.open(screenshot[0])
     cropped = image.crop((0, 600, 1000, 1345))
     cropped.save("cropped.png")
@@ -41,11 +41,12 @@ class OrdBot:
     while True:
       for inscription in self.get_new_inscriptions():
         status = "{}\n{}\n".format(inscription.title, inscription.link)
-        media = self.client.media_upload(
-          filename=self.get_screenshot(inscription)
-        )
-        response = self.client.update_status(status, media_ids=[media.media_id])
-        print(response + "\n\n")
+        print("Status: {}".format(status))
+        # media = self.client.media_upload(
+          # filename=self.get_screenshot(inscription)
+        # )
+        # response = self.client.update_status(status, media_ids=[media.media_id])
+        # print(response + "\n\n")
         time.sleep(10)
 
       time.sleep(10)
