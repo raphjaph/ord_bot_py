@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+apt-get update -y && apt-get upgrade -y
+apt-get install --yes \
+  acl \
+  clang \
+  libsqlite3-dev\
+  libssl-dev \
+  pkg-config \
+  ufw \
+  vim \
+  python3
+
+python3 get-pip.py
+
+hostnamectl set-hostname ordbot
+
+wget https://chromedriver.storage.googleapis.com/109.0.5414.74/chromedriver_linux64.zip
+apt-get install -y ./google-chrome-stable_current_amd64.deb && apt-get install -fy
+
+wget https://chromedriver.storage.googleapis.com/109.0.5414.74/chromedriver_linux64.zip
+unzip chromedriver_linux64.zip
+mv chromedriver /usr/bin/chromedriver 
+chown root:root /usr/bin/chromedriver 
+chmod +x /usr/bin/chromedriver
+
+pip3 install --upgrade setuptools pip
+pip3 install pipenv
+pipenv install
+
+cp ord_bot.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable ord_bot
+systemctl restart ord_bot

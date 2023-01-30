@@ -3,20 +3,10 @@ default:
 
 all: forbid fmt
 
-deploy2:
-  ssh 8el "mkdir -p ~/infrastructure/ord_bot"
-  scp -r bin/deploy bin/ord_bot.service ord_bot/*.py 8el:~/infrastructure/ord_bot
-  ssh 8el "cd ~/infrastructure/ord_bot \
-    && ./deploy"
-
 deploy:
-  ssh 8el "mkdir -p ~/infrastructure/ord_bot"
-  scp -r Dockerfile Pipfile* ord_bot/*.py 8el:~/infrastructure/ord_bot
-  ssh 8el "cd ~/infrastructure/ord_bot \
-    && docker build -t ord_bot . \
-    && docker stop ord_bot \
-    && docker rm ord_bot \
-    && docker run --name=ord_bot --restart=unless-stopped -d ord_bot"
+  ssh ordbot "mkdir -p /var/lib/ord_bot"
+  scp -r Pipfile* ord_bot/*.py bin/{deploy, ord_bot.service} 8el:~/infrastructure/ord_bot
+  ssh 8el "cd /var/lib/ord_bot && ./deploy"
 
 env:
   pipenv shell --dev
