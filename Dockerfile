@@ -1,15 +1,13 @@
-# FROM zenika/alpine-chrome
-# FROM python:3
-FROM nixos/nix
-
-RUN nix-channel --update
-
-RUN nix-build -A pythonFull '<nixpkgs>'
+FROM python:3.10
 
 WORKDIR /ord_bot
 
-COPY ./ord_bot .
+COPY ./ord_bot/* .
 
-RUN pip install tweepy feedparser html2image pillow
+COPY . .
 
-CMD [ "python", "-u", "ord_bot.py" ]
+RUN pip install --upgrade setuptools pip
+
+RUN pip install pipenv
+
+CMD [ "pipenv", "run", "python", "-u", "ord_bot.py" ]
