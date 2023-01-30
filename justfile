@@ -3,6 +3,12 @@ default:
 
 all: forbid fmt
 
+deploy2:
+  ssh 8el "mkdir -p ~/infrastructure/ord_bot"
+  scp -r bin/deploy bin/ord_bot.service ord_bot/*.py 8el:~/infrastructure/ord_bot
+  ssh 8el "cd ~/infrastructure/ord_bot \
+    && ./deploy"
+
 deploy:
   ssh 8el "mkdir -p ~/infrastructure/ord_bot"
   scp -r Dockerfile Pipfile* ord_bot/*.py 8el:~/infrastructure/ord_bot

@@ -4,6 +4,7 @@ import feedparser
 import tweepy
 from credentials import *
 from selenium import webdriver
+# import chromedriver_binary
 
 class OrdBot:
   def __init__(self, client, feed):
@@ -11,15 +12,17 @@ class OrdBot:
     self.feed = feed
 
     options = webdriver.ChromeOptions()
+    options.add_argument('--no-sandbox')
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
+    options.add_argument('--disable-dev-shm-usage')
     self.webdriver = webdriver.Chrome(options=options)
 
   def last_tweeted_inscription(self):
     last_tweet = self.client.home_timeline(count=1)[0]
     current = int(str(last_tweet.text).split()[1])
 
-    return 265
+    return 276
 
   def load_inscriptions(self):
     entries = feedparser.parse(self.feed).entries

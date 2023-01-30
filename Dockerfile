@@ -1,28 +1,21 @@
 FROM python:3.10
-# FROM nixos/nix
-
-# RUN nix-channel --update
-
-# RUN nix-build -A python310Full '<nixpkgs>'
 
 WORKDIR /ord_bot
 
 COPY . .
 
-# ENV NIXPKGS_ALLOW_UNFREE=1
-
-# TODO: make a shell.nix
-# RUN nix-env -iA nixpkgs.google-chrome
-# RUN nix-env -iA nixpkgs.chromedriver
-# RUN nix-env -iA nixpkgs.python310Full
-# RUN nix-env -iA nixpkgs.python310Packages.pip
-
+RUN apt-get update -y && apt-get upgrade -y
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt-get install -y ./google-chrome-stable_current_amd64.deb && apt-get install -fy
 
-RUN apt install ./google-chrome-stable_current_amd64.deb
+RUN wget https://chromedriver.storage.googleapis.com/109.0.5414.74/chromedriver_linux64.zip
+RUN unzip chromedriver_linux64.zip
+RUN mv chromedriver /usr/bin/chromedriver 
+RUN chown root:root /usr/bin/chromedriver 
+RUN chmod +x /usr/bin/chromedriver
+ENV DISPLAY=:99
 
 RUN pip install --upgrade setuptools pip
-
-RUN pip install feedparser tweepy selenium
+RUN pip install feedparser tweepy selenium chromedriver-binary
 
 CMD [ "python", "-u", "ord_bot.py" ]
