@@ -5,11 +5,14 @@ all: forbid fmt
 
 deploy:
   ssh ordbot "mkdir -p /var/lib/ord_bot"
-  scp -r Pipfile* ord_bot/*.py bin/{deploy, ord_bot.service} 8el:~/infrastructure/ord_bot
-  ssh 8el "cd /var/lib/ord_bot && ./deploy"
+  scp -r Pipfile* ord_bot/*.py bin/* ordbot:/var/lib/ord_bot
+  ssh ordbot "cd /var/lib/ord_bot && ./deploy"
+
+stop:
+  ssh ordbot "systemctl stop ord_bot"
 
 env:
-  pipenv shell --dev
+  pipenv shell
 
 forbid:
   ./bin/forbid

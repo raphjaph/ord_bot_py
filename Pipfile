@@ -6,9 +6,7 @@ name = "pypi"
 [packages]
 feedparser = "==6.0.10"
 tweepy = "==4.12.1"
-pillow = "*"
 selenium = "*"
-chromedriver-binary = "*"
 
 [dev-packages]
 isort = "*"

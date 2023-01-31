@@ -4,7 +4,6 @@ import feedparser
 import tweepy
 from credentials import *
 from selenium import webdriver
-# import chromedriver_binary
 
 class OrdBot:
   def __init__(self, client, feed):
@@ -22,7 +21,7 @@ class OrdBot:
     last_tweet = self.client.home_timeline(count=1)[0]
     current = int(str(last_tweet.text).split()[1])
 
-    return 276
+    return current
 
   def load_inscriptions(self):
     entries = feedparser.parse(self.feed).entries
@@ -52,7 +51,7 @@ class OrdBot:
         print(response)
         time.sleep(10)
 
-      time.sleep(10)
+      time.sleep(300)
 
 def main():
   print("running ord_bot...")

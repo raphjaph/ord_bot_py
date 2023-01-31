@@ -1,26 +1,19 @@
 [Unit]
 After=network.target
-Description=Ord Bot
+Description=ord_bot
 StartLimitBurst=120
 StartLimitIntervalSec=10m
 
 [Service]
-ExecStart=/usr/bin/python3 /var/lib/ord_bot/ord_bot.py
-Group=ord_bot
-MemoryDenyWriteExecute=true
-NoNewPrivileges=true
-PrivateDevices=true
-PrivateTmp=true
-ProtectHome=true
-ProtectSystem=full
+User=root
+WorkingDirectory=/var/lib/ord_bot
+ExecStart=/usr/local/bin/pipenv run python3.10 /var/lib/ord_bot/ord_bot.py
 Restart=on-failure
 RestartSec=5s
-StateDirectory=/var/lib/ord_bot
-StateDirectoryMode=0700
+StandardOutput=syslog+console
+StandardError=syslog+console
 TimeoutStopSec=10m
 Type=simple
-User=ord
-WorkingDirectory=/var/lib/ord_bot
 
 [Install]
 WantedBy=multi-user.target
