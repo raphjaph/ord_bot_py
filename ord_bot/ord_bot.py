@@ -15,6 +15,7 @@ class OrdBot:
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--hide-scrollbars')
     self.webdriver = webdriver.Chrome(options=options)
 
   def last_tweeted_inscription(self):
