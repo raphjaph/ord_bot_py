@@ -11,6 +11,9 @@ deploy:
 stop:
   ssh ordbot "systemctl stop ord_bot"
 
+status:
+  ssh ordbot "systemctl status ord_bot"
+
 env:
   pipenv shell
 

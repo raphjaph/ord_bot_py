@@ -40,6 +40,7 @@ class OrdBot:
     path_components[0] = "preview"
     preview_link = protocol + "://" + host + "/" + "/".join(path_components)
     self.webdriver.get(preview_link)
+    time.sleep(3)
     self.webdriver.save_screenshot("screenshot.png")
 
   def run(self):
@@ -48,9 +49,8 @@ class OrdBot:
         self.take_screenshot(inscription)
         status = "{}\n{}\n".format(inscription.title, inscription.link)
         media = self.client.media_upload(filename="screenshot.png")
-        response = self.client.update_status(status, media_ids=[media.media_id])
-        print(response)
-        time.sleep(10)
+        self.client.update_status(status, media_ids=[media.media_id])
+        time.sleep(5)
 
       time.sleep(300)
 
