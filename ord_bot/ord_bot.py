@@ -16,6 +16,7 @@ class OrdBot:
     options.add_argument('--disable-gpu')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--hide-scrollbars')
+    options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36');
     self.webdriver = webdriver.Chrome(options=options)
 
   def last_tweeted_inscription(self):
@@ -42,6 +43,12 @@ class OrdBot:
     self.webdriver.get(preview_link)
     time.sleep(3)
     self.webdriver.save_screenshot("screenshot.png")
+
+  def group_inscriptions(self, n):
+      
+    group = self.load_inscriptions()[:min(n, le)]:
+        
+
 
   def run(self):
     while True:
