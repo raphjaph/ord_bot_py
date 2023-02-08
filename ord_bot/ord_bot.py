@@ -50,9 +50,9 @@ class OrdBot:
         status = "{}\n{}\n".format(inscription.title, inscription.link)
         media = self.client.media_upload(filename="screenshot.png")
         self.client.update_status(status, media_ids=[media.media_id])
-        time.sleep(5)
+        time.sleep(1)
 
-      time.sleep(300)
+      time.sleep(180)
 
 def main():
   print("running ord_bot...")
