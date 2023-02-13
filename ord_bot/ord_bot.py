@@ -40,7 +40,7 @@ class OrdBot:
     path_components[0] = "preview"
     preview_link = protocol + "://" + host + "/" + "/".join(path_components)
     self.webdriver.get(preview_link)
-    time.sleep(3)
+    time.sleep(2)
     self.webdriver.save_screenshot("screenshot.png")
 
   def run(self):
